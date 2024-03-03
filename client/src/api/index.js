@@ -8,3 +8,7 @@ export const userSignin = (data) => API.post("/signin", data);
 
 //Admin Auth:
 export const adminSignin = (data) => API.post('/admin/signin', data);
+
+//Admin Product:
+
+export const addProductToDB = (data) => API.post('/admin/add-product', data);

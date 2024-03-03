@@ -33,6 +33,7 @@ export const adminSignin = (info, navigate) => async (dispatch) => {
     const { data } = await api.adminSignin(info);
     await toast.success("Login Successfull.");
     await dispatch({ type: ADMIN_AUTH, payload: data });
+    navigate('/admin');
   } catch (error) {
     toast.error(error.message);
   }

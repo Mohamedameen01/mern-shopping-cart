@@ -1,12 +1,9 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-import UserLayout from "./user/UserLayout";
-import AdminLayout from "./admin/AdminLayout";
-import Auth from "./user/pages/Auth";
-import Signin from "./components/AuthForms/Signin";
-import Signup from "./components/AuthForms/Signup";
-import Home from "./user/pages/Home";
-import AdminAuth from "./admin/pages/AdminAuth";
+import { Signin,Signup } from "./components/AuthForms";
+import { UserLayout,Auth, UserHome } from "./user";
+import { AdminLayout,AdminAuth, AdminHome } from "./admin";
+import { AddProduct } from "./components";
 
 function App() {
   return (
@@ -18,12 +15,14 @@ function App() {
             <Route path="/signin" element={<Signin />} />
             <Route path="/signup" element={<Signup />} />
           </Route>
-          <Route index element={<Home />} />
+          <Route index element={<UserHome />} />
         </Route>
 
         {/* This Route for admin */}
         <Route element={<AdminLayout />}>
-            <Route path="/admin/signin" element={<AdminAuth />} />
+          <Route path="/admin/signin" element={<AdminAuth />} />
+          <Route path="/admin" element={<AdminHome />} />
+          <Route path="/admin/add-product" element={<AddProduct />} />
         </Route>
       </Routes>
     </BrowserRouter>

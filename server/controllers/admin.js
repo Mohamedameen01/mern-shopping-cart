@@ -32,3 +32,11 @@ export const login = async (req, res) => {
     res.status(400).json({ message: "Login Failed." });
   }
 };
+
+export const addProduct = async (req, res) => {
+  try {
+    
+  } catch (error) {
+    
+  }
+}

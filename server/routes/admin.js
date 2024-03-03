@@ -6,4 +6,6 @@ const router = express.Router();
 
 router.post('/signin', login);
 
+router.post('/add-product', addProduct);
+
 export default router;
