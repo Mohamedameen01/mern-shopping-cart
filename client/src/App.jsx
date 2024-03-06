@@ -1,9 +1,9 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-import { Signin,Signup } from "./components/AuthForms";
-import { UserLayout,Auth, UserHome } from "./user";
-import { AdminLayout,AdminAuth, AdminHome } from "./admin";
-import { AddProduct } from "./components";
+import { Signin, Signup } from "./components/AuthForms";
+import { UserLayout, Auth, UserHome } from "./user";
+import { AdminLayout, AdminAuth, AdminHome } from "./admin";
+import { AddProduct, EditProduct } from "./components";
 
 function App() {
   return (
@@ -23,6 +23,10 @@ function App() {
           <Route path="/admin/signin" element={<AdminAuth />} />
           <Route path="/admin" element={<AdminHome />} />
           <Route path="/admin/add-product" element={<AddProduct />} />
+          <Route
+            path="/admin/edit-product/:productId"
+            element={<EditProduct />}
+          />
         </Route>
       </Routes>
     </BrowserRouter>

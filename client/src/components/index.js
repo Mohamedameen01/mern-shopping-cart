@@ -1,5 +1,6 @@
 import Navbar from "./Navbar";
-import Products from "./Products";
+import ViewProducts from "./ViewProducts";
 import AddProduct from "./AddProduct";
+import EditProduct from "./EditProduct";
 
-export { Navbar, Products, AddProduct };
+export { Navbar, ViewProducts, AddProduct, EditProduct };

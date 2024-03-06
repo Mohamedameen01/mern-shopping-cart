@@ -1,10 +1,15 @@
 import { useEffect, useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate, useParams } from "react-router-dom";
 
-import { useDispatch } from "react-redux";
-import { addProductToDB } from "../redux/admin/adminActions";
+import { updateProductData } from "../redux/admin/adminActions";
 
-function AddProduct() {
+function EditProduct() {
+  const products = useSelector((state) => state.admin);
   const dispatch = useDispatch();
+  const inputFocus = useRef();
+  const { productId } = useParams();
+  const navigate = useNavigate();
   const [prodData, setProdData] = useState({
     title: "",
     description: "",
@@ -14,11 +19,12 @@ function AddProduct() {
   });
   const [img, setImg] = useState();
 
-  const inputFocus = useRef();
-
-  useEffect(() => {
-    inputFocus.current.focus();
-  }, []);
+  const filterProducts = async () => {
+    const filteredProduct = await products.filter(
+      (product) => product._id === productId
+    );
+    setProdData(filteredProduct[0]);
+  };
 
   const handleImageUpload = (e) => {
     const imgFile = e.target.value;
@@ -29,23 +35,20 @@ function AddProduct() {
     if (file && file.type.startsWith("image/")) {
       const fileReader = new FileReader();
       fileReader.readAsDataURL(file);
-      fileReader.onload = () =>
+      fileReader.onload = () => {
         setProdData({ ...prodData, image: fileReader.result });
+      };
     }
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    await dispatch(addProductToDB(prodData));
+  useEffect(() => {
+    filterProducts();
+    inputFocus.current.focus();
+  }, []);
 
-    setProdData({
-      title: "",
-      description: "",
-      category: "",
-      price: "",
-      image: "",
-    });
-    setImg("");
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    dispatch(updateProductData(prodData,navigate));
   };
 
   return (
@@ -61,7 +64,7 @@ function AddProduct() {
                 className="form-control"
                 id="title"
                 name="title"
-                value={prodData.title}
+                value={prodData?.title}
                 ref={inputFocus}
                 onChange={(e) =>
                   setProdData({ ...prodData, [e.target.name]: e.target.value })
@@ -78,7 +81,7 @@ function AddProduct() {
                 id="description"
                 maxLength="100"
                 name="description"
-                value={prodData.description}
+                value={prodData?.description}
                 onChange={(e) =>
                   setProdData({ ...prodData, [e.target.name]: e.target.value })
                 }
@@ -93,7 +96,7 @@ function AddProduct() {
                 className="form-control"
                 id="category"
                 name="category"
-                value={prodData.category}
+                value={prodData?.category}
                 onChange={(e) =>
                   setProdData({ ...prodData, [e.target.name]: e.target.value })
                 }
@@ -108,7 +111,7 @@ function AddProduct() {
                 className="form-control"
                 id="price"
                 name="price"
-                value={prodData.price}
+                value={prodData?.price}
                 onChange={(e) =>
                   setProdData({ ...prodData, [e.target.name]: e.target.value })
                 }
@@ -137,4 +140,4 @@ function AddProduct() {
   );
 }
 
-export default AddProduct;
+export default EditProduct;

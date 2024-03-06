@@ -10,5 +10,6 @@ export const userSignin = (data) => API.post("/signin", data);
 export const adminSignin = (data) => API.post('/admin/signin', data);
 
 //Admin Product:
-
+export const getProducts = () => API.get('/admin');
 export const addProductToDB = (data) => API.post('/admin/add-product', data);
+export const updateProduct = (data) => API.patch('/admin/edit-product',data)
