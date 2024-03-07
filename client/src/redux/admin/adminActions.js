@@ -4,6 +4,7 @@ import * as api from "../../api/index";
 import {
   ADD_PRODUCT,
   ALL_PRODUCT,
+  ALL_USERS,
   DELETE_PRODUCT,
   UPDATE_PRODUCT,
 } from "./actionTypes";
@@ -47,3 +48,12 @@ export const deleteSelectedProduct = (id) => async (dispatch) => {
     toast.error(error.message);
   }
 };
+
+export const getAllUsers = () => async (dispatch) => {
+  try {
+    const {data} = await api.getAllUsers();
+    dispatch({type:ALL_USERS, payload: data});
+  } catch (error) {
+    toast.error(error.message);
+  }
+}

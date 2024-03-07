@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 
 import Admin from "../models/admin/authSchema.js";
 import Product from "../models/admin/productSchema.js";
+import User from "../models/user/authSchema.js";
 
 dotenv.config();
 // Auth:
@@ -78,5 +79,14 @@ export const deleteProduct = async (req, res) => {
     res.status(200).json(data);
   } catch (error) {
     res.status(400).json({messge: "Can't Delete Selected Product."})
+  }
+}
+
+export const getUsers = async (req, res) => {
+  try {
+    const data = await User.find();
+    res.status(200).json(data);
+  } catch (error) {
+    res.status(400).json({message: 'There is Something Error on Database.'})
   }
 }

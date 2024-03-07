@@ -35,19 +35,19 @@ function Navbar({ admin }) {
       <header>
         <div className="container mt-2">
           <div className=" d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
-            <a href="/" className="navbar-brand fs-5 fw-bold">
+            <a href={admin ? '/admin' : '/'} className="navbar-brand fs-5 fw-bold">
               Shopping Cart
             </a>
 
             <ul className="nav col-12 col-lg-auto me-lg-auto ms-4 mb-2 justify-content-center mb-md-0">
               <li>
-                <a href="/" className="nav-link px-2 link-secondary">
+                <a href={admin ? '/admin/all-products' : ''} className="nav-link px-2 link-secondary">
                   {admin ? "All Products" : "Products"}
                 </a>
               </li>
               <li>
                 <a
-                  href="/cart"
+                  href={admin ? '/admin/all-users' : ''}
                   className="nav-link px-2 link-body-emphasis position:relative me-3"
                 >
                   {admin ? "All Users" : "Cart"}
@@ -64,7 +64,7 @@ function Navbar({ admin }) {
 
               <li>
                 <a
-                  href="/view-orders"
+                  href={admin ? '/admin/all-orders' : ''}
                   className="nav-link px-2 link-body-emphasis"
                 >
                   {admin ? "All Orders" : "Orders"}

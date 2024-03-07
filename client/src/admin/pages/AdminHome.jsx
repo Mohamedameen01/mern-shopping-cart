@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Navbar, ViewProducts } from "../../components";
+import { Navbar, ProductsLists } from "../../components";
 import { useDispatch } from "react-redux";
 import { getAllProducts } from "../../redux/admin/adminActions";
 
@@ -13,7 +13,7 @@ function AdminHome() {
   return (
     <div>
       <Navbar admin={true} />
-      <ViewProducts admin={true} />
+      <ProductsLists />
     </div>
   );
 }

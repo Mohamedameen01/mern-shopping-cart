@@ -2,8 +2,10 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import { Signin, Signup } from "./components/AuthForms";
 import { UserLayout, Auth, UserHome } from "./user";
-import { AdminLayout, AdminAuth, AdminHome } from "./admin";
+import { AdminLayout, AdminAuth, AdminHome, AllProducts } from "./admin";
 import { AddProduct, EditProduct } from "./components";
+import AllOrders from "./admin/pages/AllOrders";
+import AllUsers from "./admin/pages/AllUsers";
 
 function App() {
   return (
@@ -27,6 +29,9 @@ function App() {
             path="/admin/edit-product/:productId"
             element={<EditProduct />}
           />
+          <Route path="/admin/all-products" element={<AllProducts />} />
+          <Route path="/admin/all-orders" element={<AllOrders />} />
+          <Route path="/admin/all-users" element={<AllUsers />} />
         </Route>
       </Routes>
     </BrowserRouter>

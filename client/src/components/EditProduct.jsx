@@ -48,14 +48,14 @@ function EditProduct() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(updateProductData(prodData,navigate));
+    dispatch(updateProductData(prodData, navigate));
   };
 
   return (
     <div>
       <section>
         <div className="container mt-5 ">
-          <h2 className="text-center">Add Product</h2>
+          <h2 className="text-center">Edit Product</h2>
           <form onSubmit={handleSubmit} noValidate className="w-50 mx-auto">
             <div className="form-group m-3">
               <label>Title</label>

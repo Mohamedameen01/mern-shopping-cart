@@ -1,7 +1,10 @@
 import Navbar from "./Navbar";
-import ViewProducts from "./ViewProducts";
+import ProductsLists from "./ProductsLists";
 import AddProduct from "./AddProduct";
 import EditProduct from "./EditProduct";
 import OnConfirm from "./OnConfirm";
+import ViewProducts from "./ViewProducts";
+import ViewOrders from "./ViewOrders";
+import ViewUsers from "./ViewUsers";
 
-export { Navbar, ViewProducts, AddProduct, EditProduct, OnConfirm };
+export { Navbar, ProductsLists, AddProduct, EditProduct, OnConfirm, ViewProducts, ViewOrders, ViewUsers };
