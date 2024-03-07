@@ -12,4 +12,5 @@ export const adminSignin = (data) => API.post('/admin/signin', data);
 //Admin Product:
 export const getProducts = () => API.get('/admin');
 export const addProductToDB = (data) => API.post('/admin/add-product', data);
-export const updateProduct = (data) => API.patch('/admin/edit-product',data)
+export const updateProduct = (data) => API.patch('/admin/edit-product',data);
+export const deleteProduct = (id) => API.delete(`/admin/delete-product?id=${id}`);

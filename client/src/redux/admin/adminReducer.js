@@ -1,4 +1,9 @@
-import { ADD_PRODUCT, ALL_PRODUCT, UPDATE_PRODUCT } from "./actionTypes";
+import {
+  ADD_PRODUCT,
+  ALL_PRODUCT,
+  DELETE_PRODUCT,
+  UPDATE_PRODUCT,
+} from "./actionTypes";
 
 const adminReducer = (state = [], action) => {
   switch (action.type) {
@@ -8,6 +13,8 @@ const adminReducer = (state = [], action) => {
       return [...state, action.payload];
     case UPDATE_PRODUCT:
       return [...state, action.payload];
+    case DELETE_PRODUCT:
+      return state.filter((product) => product._id !== action.payload);
     default:
       return state;
   }

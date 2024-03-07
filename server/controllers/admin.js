@@ -57,12 +57,26 @@ export const addProduct = async (req, res) => {
 export const updateProduct = async (req, res) => {
   try {
     const { _id, title, description, category, price, image } = req.body;
-    const product = await Product.findByIdAndUpdate(_id, {title,description,category,image,price}, {
-      new: true,
-    });
+    const product = await Product.findByIdAndUpdate(
+      _id,
+      { title, description, category, image, price },
+      {
+        new: true,
+      }
+    );
     res.status(200).json(product);
   } catch (error) {
-    res.status(400).json({ message: "can't update your data" });
+    res.status(400).json({ message: "Can't Update Your Data" });
     console.log(error);
   }
 };
+
+export const deleteProduct = async (req, res) => {
+  try {
+    const id = req.query.id;
+    const data = await Product.findByIdAndDelete(id);
+    res.status(200).json(data);
+  } catch (error) {
+    res.status(400).json({messge: "Can't Delete Selected Product."})
+  }
+}
