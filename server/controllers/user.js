@@ -34,8 +34,8 @@ export const register = async (req, res) => {
 export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
+
     const user = await User.findOne({ email });
-    
     if (!user) {
       res
         .status(404)
@@ -56,5 +56,15 @@ export const login = async (req, res) => {
     }
   } catch (error) {
     res.status(400).json({ message: "Login Failed." });
+  }
+};
+
+// Cart:
+export const addToCart = async (req, res) => {
+  try {
+    
+  } catch (error) {
+    res.status(400).json({ message: "There is Something Error on Database." });
+    console.log(error);
   }
 };

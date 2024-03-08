@@ -47,7 +47,7 @@ function Navbar({ admin }) {
               </li>
               <li>
                 <a
-                  href={admin ? '/admin/all-users' : ''}
+                  href={admin ? '/admin/all-users' : '/cart'}
                   className="nav-link px-2 link-body-emphasis position:relative me-3"
                 >
                   {admin ? "All Users" : "Cart"}

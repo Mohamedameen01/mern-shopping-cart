@@ -4,10 +4,10 @@ import { addProduct, deleteProduct, getProducts, login, updateProduct, getUsers 
 
 const router = express.Router();
 
-// Admin Auth:
+//  Auth:
 router.post('/signin', login);
 
-// Admin Product:
+//  Product:
 router.get('/', getProducts);
 router.post('/add-product', addProduct);
 router.patch('/edit-product', updateProduct);

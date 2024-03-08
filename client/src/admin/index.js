@@ -2,5 +2,7 @@ import AdminAuth from "./pages/AdminAuth";
 import AdminHome from "./pages/AdminHome";
 import AdminLayout from "./AdminLayout";
 import AllProducts from "./pages/AllProducts";
+import AllOrders from "./pages/AllOrders";
+import AllUsers from "./pages/AllUsers";
 
-export { AdminLayout, AdminAuth, AdminHome, AllProducts };
+export { AdminLayout, AdminAuth, AdminHome, AllProducts, AllOrders, AllUsers };

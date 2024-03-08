@@ -1,11 +1,10 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import { Signin, Signup } from "./components/AuthForms";
-import { UserLayout, Auth, UserHome } from "./user";
-import { AdminLayout, AdminAuth, AdminHome, AllProducts } from "./admin";
+import { UserLayout, Auth, UserHome, UserCart } from "./user";
+import { AdminLayout, AdminAuth, AdminHome, AllProducts, AllUsers, AllOrders } from "./admin";
 import { AddProduct, EditProduct } from "./components";
-import AllOrders from "./admin/pages/AllOrders";
-import AllUsers from "./admin/pages/AllUsers";
+
 
 function App() {
   return (
@@ -18,6 +17,7 @@ function App() {
             <Route path="/signup" element={<Signup />} />
           </Route>
           <Route index element={<UserHome />} />
+          <Route path="/cart" element={<UserCart />} />
         </Route>
 
         {/* This Route for admin */}

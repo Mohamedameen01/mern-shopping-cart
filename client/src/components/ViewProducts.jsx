@@ -1,8 +1,16 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { addToCart } from "../redux/cart/cartActions";
 
-function ViewProducts() {
+
+function ViewProducts({ admin }) {
   const products = useSelector((state) => state.admin);
+  const dispatch = useDispatch();
+  
+  const handleCart = (id) => {
+    dispatch(addToCart(id));
+  };
+
   return (
     <section className="container mt-5 d-flex flex-wrap ">
       {products.map((item) => (
@@ -22,17 +30,27 @@ function ViewProducts() {
             <p className="card-text" style={{ maxHeight: "5rem" }}>
               {item?.description}
             </p>
-            <div className="d-flex justify-content-between align-items-end">
-              <p className="fw-bolder ">
+            <div className="d-flex justify-content-between ">
+              <p className="fw-bolder">
                 <span>&#8377;</span>
                 {item?.price}
               </p>
-              <Link
-                to={`/admin/edit-product/${item._id}`}
-                className="text-decoration-none text-dark material-symbols-outlined"
-              >
-                edit_square
-              </Link>
+              {admin ? (
+                <Link
+                  to={`/admin/edit-product/${item._id}`}
+                  className="text-decoration-none text-dark material-symbols-outlined"
+                >
+                  edit_square
+                </Link>
+              ) : (
+                <span
+                  onClick={() => handleCart(item._id)}
+                  className="text-decoration-none text-dark material-symbols-outlined"
+                  style={{ cursor: "pointer" }}
+                >
+                  shopping_cart
+                </span>
+              )}
             </div>
           </div>
         </div>

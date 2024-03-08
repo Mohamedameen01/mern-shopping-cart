@@ -18,13 +18,13 @@ function ProductsLists() {
 
   const handleCancel = () => {
     toast.info("Delete Action Canceled");
-    setOpen(!open)
+    setOpen(!open);
   };
 
-  const handleSuccess = async() => {
+  const handleSuccess = async () => {
     await dispatch(deleteSelectedProduct(deleteData.id));
     setOpen(!open);
-  }
+  };
 
   return (
     <section>

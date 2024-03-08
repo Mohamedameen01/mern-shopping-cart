@@ -6,5 +6,6 @@ import OnConfirm from "./OnConfirm";
 import ViewProducts from "./ViewProducts";
 import ViewOrders from "./ViewOrders";
 import ViewUsers from "./ViewUsers";
+import Cart from "./Cart";
 
-export { Navbar, ProductsLists, AddProduct, EditProduct, OnConfirm, ViewProducts, ViewOrders, ViewUsers };
+export { Navbar, ProductsLists, AddProduct, EditProduct, OnConfirm, ViewProducts, ViewOrders, ViewUsers, Cart };

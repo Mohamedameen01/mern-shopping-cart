@@ -11,7 +11,7 @@ function AllProducts() {
   return (
     <div>
       <Navbar admin={true} />
-      <ViewProducts />
+      <ViewProducts admin={true} />
     </div>
   );
 }
