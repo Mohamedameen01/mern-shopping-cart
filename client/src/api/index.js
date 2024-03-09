@@ -49,3 +49,4 @@ export const getAllUsers = () => API.get("/admin/all-users");
 
 //User Side:
 export const addCart = (id) => API.post(`/cart?id=${id}`);
+export const getCart = () => API.get('/cart');

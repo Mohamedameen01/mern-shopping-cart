@@ -1,24 +1,27 @@
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { useLocation, useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
 
 import { ADMIN_LOGOUT, USER_LOGOUT } from "../redux/auth/actionTypes";
 
 function Navbar({ admin }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
 
+  const cartItem = useSelector((state) => state.cart)[0];
   const [info, setInfo] = useState();
 
   useEffect(() => {
     if (admin) {
       const admin = JSON.parse(localStorage.getItem("ADMIN_LOCAL"));
-      setInfo(admin?.data);
+      setInfo(admin);
     } else {
       const user = JSON.parse(localStorage.getItem("USER_LOCAL"));
-      setInfo(user?.data);
+      setInfo(user);
     }
-  }, []);
+  }, [location]);
 
   const handleLogout = () => {
     if (admin) {
@@ -30,24 +33,40 @@ function Navbar({ admin }) {
     }
   };
 
+  useEffect(() => {
+    const token = info?.token;
+    if (token) {
+      const decoded = jwtDecode(token);
+      if (decoded * 1000 < new Date().getTime()) {
+        handleLogout();
+      }
+    }
+  }, [location]);
+
   return (
     <div>
       <header>
         <div className="container mt-2">
           <div className=" d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
-            <a href={admin ? '/admin' : '/'} className="navbar-brand fs-5 fw-bold">
+            <a
+              href={admin ? "/admin" : "/"}
+              className="navbar-brand fs-5 fw-bold"
+            >
               Shopping Cart
             </a>
 
             <ul className="nav col-12 col-lg-auto me-lg-auto ms-4 mb-2 justify-content-center mb-md-0">
               <li>
-                <a href={admin ? '/admin/all-products' : ''} className="nav-link px-2 link-secondary">
+                <a
+                  href={admin ? "/admin/all-products" : ""}
+                  className="nav-link px-2 link-secondary"
+                >
                   {admin ? "All Products" : "Products"}
                 </a>
               </li>
               <li>
                 <a
-                  href={admin ? '/admin/all-users' : '/cart'}
+                  href={admin ? "/admin/all-users" : "/cart"}
                   className="nav-link px-2 link-body-emphasis position:relative me-3"
                 >
                   {admin ? "All Users" : "Cart"}
@@ -56,7 +75,7 @@ function Navbar({ admin }) {
                       className="position-absolute rounded-circle  badge bg-success"
                       id="cart-counts"
                     >
-                      0
+                      {cartItem?.items?.length || "0"}
                     </span>
                   )}
                 </a>
@@ -64,7 +83,7 @@ function Navbar({ admin }) {
 
               <li>
                 <a
-                  href={admin ? '/admin/all-orders' : ''}
+                  href={admin ? "/admin/all-orders" : ""}
                   className="nav-link px-2 link-body-emphasis"
                 >
                   {admin ? "All Orders" : "Orders"}
@@ -79,10 +98,10 @@ function Navbar({ admin }) {
                 data-bs-toggle="dropdown"
                 aria-expanded="false"
               >
-                {info?.name ? info?.name : "Account"}
+                {info?.data?.name ? info?.data?.name : "Account"}
               </button>
               <ul className="dropdown-menu bg-dark ">
-                {info?.name ? (
+                {info?.data?.name ? (
                   <li>
                     <a
                       className="dropdown-item text-light fs-6 fw-medium bg-dark"
@@ -96,7 +115,7 @@ function Navbar({ admin }) {
                   <li>
                     <a
                       className="dropdown-item text-light fs-6 fw-medium bg-dark"
-                      href={admin ? "admin/signin" : '/signin'}
+                      href={admin ? "admin/signin" : "/signin"}
                     >
                       Login
                     </a>
