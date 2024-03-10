@@ -38,3 +38,14 @@ export const setItemQuantity =
       console.log(error);
     }
   };
+
+export const removeCartItem = (id) => async (dispatch) => {
+  try {
+    const {data} = await api.removeCart(id);
+    console.log(data);
+    toast.warning('Product Removed From Cart.')
+  } catch (error) {
+    toast.error(error.message);
+    console.log(error);
+  }
+}

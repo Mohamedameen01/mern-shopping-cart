@@ -187,3 +187,23 @@ export const setCartQuantity = async (req, res) => {
     console.log(error);
   }
 };
+
+export const removeFromCart = async (req, res) => {
+  try {
+    const itemId = req.query.id;
+    const userId = req.userId;
+
+    const data = await Cart.findOneAndDelete(
+      {
+        userId,
+      },
+      {
+        $pull: { products: { item: itemId} },
+      }
+    );
+    res.status(200).json(data);
+  } catch (error) {
+    res.status(400).json({ message: "There is Something Error on Database" });
+    console.log(error);
+  }
+};
