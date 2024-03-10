@@ -70,10 +70,16 @@ export const addToCart = async (req, res) => {
     const user = await Cart.findOne({ userId });
 
     if (user) {
-      let isProduct = await Cart.findOne({ "products.item": productId });
-      if (isProduct) {
+      let isProduct = await user.products.findIndex(
+        (product) => product.item == productId
+      );
+
+      if (isProduct != -1) {
         const incData = await Cart.findOneAndUpdate(
-          { "products.item": productId },
+          {
+            userId: userId,
+            "products.item": productId,
+          },
           { $inc: { "products.$.quantity": 1 } },
           { new: true }
         );
@@ -144,7 +150,6 @@ export const getCart = async (req, res) => {
           total: { $sum: { $multiply: ["$quantity", "$product.price"] } },
         },
       },
-      
     ]).exec();
     res.status(200).json(data);
   } catch (error) {
@@ -154,3 +159,31 @@ export const getCart = async (req, res) => {
   }
 };
 
+export const setCartQuantity = async (req, res) => {
+  try {
+    const { id, info, quantity, cartId } = req.body;
+    if (info === -1 && quantity === 1) {
+      const data = await Cart.findOneAndUpdate(
+        { _id: cartId },
+        { $pull: { products: { item: id } } },
+        { new: true }
+      );
+      res.status(200).json({ data, message: "Product Removed." });
+    } else {
+      const data = await Cart.findOneAndUpdate(
+        {
+          _id: cartId,
+          "products.item": id,
+        },
+        {
+          $inc: { "products.$.quantity": info },
+        },
+        { new: true }
+      );
+      res.status(200).json(data);
+    }
+  } catch (error) {
+    res.status(400).json({ message: "There is Something Error on Database." });
+    console.log(error);
+  }
+};

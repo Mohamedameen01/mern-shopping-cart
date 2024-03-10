@@ -1,6 +1,6 @@
 import { toast } from "react-toastify";
 import * as api from "../../api/index";
-import { ADD_TO_CART, GET_CART } from "./actionTypes";
+import { ADD_TO_CART, GET_CART, ITEM_QUANTITY } from "./actionTypes";
 
 export const addToCart = (id) => async (dispatch) => {
   try {
@@ -22,3 +22,19 @@ export const getCartItems = () => async (dispatch) => {
   }
 };
 
+export const setItemQuantity =
+  (id, info, quantity, cartId) => async (dispatch) => {
+    try {
+      const { data } = await api.setQuantity({
+        id,
+        info,
+        quantity,
+        cartId,
+      });
+      console.log(data);
+      // await dispatch({ type: ITEM_QUANTITY, payload: data });
+    } catch (error) {
+      toast.error(error.message);
+      console.log(error);
+    }
+  };

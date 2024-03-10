@@ -1,7 +1,13 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { setItemQuantity } from "../redux/cart/cartActions";
 
 function Cart() {
+  const dispatch = useDispatch();
   const cartItem = useSelector((state) => state.cart)[0];
+  
+  const handleQuantity = async (id,info, quantity) => {
+    dispatch(setItemQuantity( id,info, quantity,cartItem._id));
+  };
 
   return (
     <section>
@@ -28,9 +34,19 @@ function Cart() {
                 </td>
                 <td scope="col">{obj?.product?.title}</td>
                 <td scope="col">
-                  <button className="btn btn-danger">-</button>
+                  <button
+                    onClick={() => handleQuantity(obj.item,-1, obj.quantity)}
+                    className="btn btn-danger"
+                  >
+                    -
+                  </button>
                   <span className="m-2">{obj?.quantity}</span>
-                  <button className="btn btn-primary">+</button>
+                  <button
+                    onClick={() => handleQuantity(obj.item,1, obj.quantity)}
+                    className="btn btn-primary"
+                  >
+                    +
+                  </button>
                 </td>
                 <td scope="col">{obj?.product?.price}</td>
                 <td>

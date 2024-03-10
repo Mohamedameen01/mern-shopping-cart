@@ -1,4 +1,4 @@
-import { ADD_TO_CART, GET_CART } from "./actionTypes";
+import { ADD_TO_CART, GET_CART, ITEM_QUANTITY } from "./actionTypes";
 
 const cartReducer = (state = [], action) => {
   switch (action.type) {
@@ -6,7 +6,8 @@ const cartReducer = (state = [], action) => {
       return action.payload;
     case ADD_TO_CART:
       return [...state, action.payload];
-      
+    case ITEM_QUANTITY:
+      return action.payload;
     default:
       return state;
   }

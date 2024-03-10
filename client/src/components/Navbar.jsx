@@ -10,7 +10,8 @@ function Navbar({ admin }) {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const cartItem = useSelector((state) => state.cart)[0];
+  const cartItem = useSelector((state) => state.cart) || [];
+
   const [info, setInfo] = useState();
 
   useEffect(() => {
@@ -75,7 +76,7 @@ function Navbar({ admin }) {
                       className="position-absolute rounded-circle  badge bg-success"
                       id="cart-counts"
                     >
-                      {cartItem?.items?.length || "0"}
+                      {cartItem[0]?.items?.length || "0"}
                     </span>
                   )}
                 </a>

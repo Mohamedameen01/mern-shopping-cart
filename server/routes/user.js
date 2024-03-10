@@ -1,6 +1,6 @@
 import express from "express";
 
-import { register, login, addToCart, getCart } from "../controllers/user.js";
+import { register, login, addToCart, getCart, setCartQuantity } from "../controllers/user.js";
 import { verifyUserLogin } from "../middleware/index.js";
 
 const router = express.Router();
@@ -12,5 +12,6 @@ router.post("/signin", login);
 // Cart:
 router.post("/cart/",verifyUserLogin, addToCart);
 router.get('/cart',verifyUserLogin, getCart);
+router.patch('/cart',verifyUserLogin, setCartQuantity);
 
 export default router;

@@ -2,11 +2,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { addToCart } from "../redux/cart/cartActions";
 
-
 function ViewProducts({ admin }) {
   const products = useSelector((state) => state.admin);
   const dispatch = useDispatch();
-  
+
   const handleCart = (id) => {
     dispatch(addToCart(id));
   };
