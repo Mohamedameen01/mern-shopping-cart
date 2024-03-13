@@ -4,43 +4,61 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 
 import { ADMIN_LOGOUT, USER_LOGOUT } from "../redux/auth/actionTypes";
+// import { getCartItemsCount } from "../redux/cart/cartActions";
 
 function Navbar({ admin }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
 
-  const cartItem = useSelector((state) => state.cart) || [];
+  const cartItem = useSelector((state) => state.cart);
 
-  const [info, setInfo] = useState();
+  const [info, setInfo] = useState({
+    user: JSON.parse(localStorage.getItem("USER_LOCAL")),
+    admin: JSON.parse(localStorage.getItem("ADMIN_LOCAL")),
+  });
 
-  useEffect(() => {
+  const handleLogout = async () => {
     if (admin) {
-      const admin = JSON.parse(localStorage.getItem("ADMIN_LOCAL"));
-      setInfo(admin);
-    } else {
-      const user = JSON.parse(localStorage.getItem("USER_LOCAL"));
-      setInfo(user);
-    }
-  }, [location]);
-
-  const handleLogout = () => {
-    if (admin) {
-      dispatch({ type: ADMIN_LOGOUT });
+      await dispatch({ type: ADMIN_LOGOUT });
       navigate("/admin/signin");
     } else {
-      dispatch({ type: USER_LOGOUT });
+      await dispatch({ type: USER_LOGOUT });
       navigate("/signin");
     }
   };
 
   useEffect(() => {
-    const token = info?.token;
-    if (token) {
-      const decoded = jwtDecode(token);
-      if (decoded * 1000 < new Date().getTime()) {
-        handleLogout();
+
+    const { user, admin } = info;
+    if (admin) {
+      const adminToken = admin?.token;
+
+      if (adminToken) {
+        const adminDecoded = jwtDecode(adminToken);
+
+        if (adminDecoded * 1000 < new Date().getTime()) {
+          handleLogout();
+        }
       }
+      setInfo({
+        user: JSON.parse(localStorage.getItem("USER_LOCAL")),
+        admin: JSON.parse(localStorage.getItem("ADMIN_LOCAL")),
+      });
+    } else {
+      const userToken = user?.token;
+
+      if (userToken) {
+        const userDecoded = jwtDecode(userToken);
+
+        if (userDecoded * 1000 < new Date().getTime()) {
+          handleLogout();
+        }
+      }
+      setInfo({
+        user: JSON.parse(localStorage.getItem("USER_LOCAL")),
+        admin: JSON.parse(localStorage.getItem("ADMIN_LOCAL"))
+      });
     }
   }, [location]);
 
@@ -76,7 +94,7 @@ function Navbar({ admin }) {
                       className="position-absolute rounded-circle  badge bg-success"
                       id="cart-counts"
                     >
-                      {cartItem[0]?.items?.length || "0"}
+                      {cartItem?.count || 0}
                     </span>
                   )}
                 </a>
@@ -99,10 +117,16 @@ function Navbar({ admin }) {
                 data-bs-toggle="dropdown"
                 aria-expanded="false"
               >
-                {info?.data?.name ? info?.data?.name : "Account"}
+                {admin
+                  ? info.admin
+                    ? info.admin.data?.name
+                    : "Account"
+                  : info.user
+                  ? info.user.data?.name
+                  : "Account"}
               </button>
               <ul className="dropdown-menu bg-dark ">
-                {info?.data?.name ? (
+                {info?.user?.data?.name || admin?.data?.name ? (
                   <li>
                     <a
                       className="dropdown-item text-light fs-6 fw-medium bg-dark"

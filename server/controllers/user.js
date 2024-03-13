@@ -5,6 +5,7 @@ import dotenv from "dotenv";
 import User from "../models/user/authSchema.js";
 import Product from "../models/admin/productSchema.js";
 import Cart from "../models/user/cartSchema.js";
+import mongoose from "mongoose";
 
 dotenv.config();
 
@@ -67,18 +68,19 @@ export const addToCart = async (req, res) => {
     const productId = req.query.id;
     const userId = req.userId;
 
+    const product = await Product.findOne({ _id: productId });
     const user = await Cart.findOne({ userId });
 
     if (user) {
       let isProduct = await user.products.findIndex(
-        (product) => product.item == productId
+        (product) => product.item._id == productId
       );
 
       if (isProduct != -1) {
         const incData = await Cart.findOneAndUpdate(
           {
             userId: userId,
-            "products.item": productId,
+            "products.item._id": productId,
           },
           { $inc: { "products.$.quantity": 1 } },
           { new: true }
@@ -87,7 +89,7 @@ export const addToCart = async (req, res) => {
       } else {
         const addedData = await Cart.findOneAndUpdate(
           { userId },
-          { $push: { products: { item: productId } } },
+          { $push: { products: { item: product } } },
           { new: true }
         );
         res.status(200).json(addedData);
@@ -95,7 +97,7 @@ export const addToCart = async (req, res) => {
     } else {
       const newUser = await Cart.create({
         userId,
-        products: { item: productId },
+        products: { item: product },
       });
       res.status(200).json(newUser);
     }
@@ -109,48 +111,7 @@ export const getCart = async (req, res) => {
   try {
     const userId = req.userId;
 
-    const data = await Cart.aggregate([
-      {
-        $match: { userId },
-      },
-      {
-        $unwind: "$products",
-      },
-      {
-        $project: {
-          item: "$products.item",
-          quantity: "$products.quantity",
-        },
-      },
-      {
-        $lookup: {
-          from: "products",
-          localField: "item",
-          foreignField: "_id",
-          as: "products",
-        },
-      },
-      {
-        $project: {
-          item: 1,
-          quantity: 1,
-          product: { $arrayElemAt: ["$products", 0] },
-        },
-      },
-      {
-        $group: {
-          _id: "$_id",
-          items: {
-            $push: {
-              item: "$item",
-              quantity: "$quantity",
-              product: "$product",
-            },
-          },
-          total: { $sum: { $multiply: ["$quantity", "$product.price"] } },
-        },
-      },
-    ]).exec();
+    const data = await Cart.findOne({ userId: userId });
     res.status(200).json(data);
   } catch (error) {
     res
@@ -162,25 +123,28 @@ export const getCart = async (req, res) => {
 export const setCartQuantity = async (req, res) => {
   try {
     const { id, info, quantity, cartId } = req.body;
+
     if (info === -1 && quantity === 1) {
       const data = await Cart.findOneAndUpdate(
         { _id: cartId },
-        { $pull: { products: { item: id } } },
+        { $pull: { products: { _id: id } } },
         { new: true }
       );
+      
       res.status(200).json({ data, message: "Product Removed." });
     } else {
-      const data = await Cart.findOneAndUpdate(
+      const product = await Cart.findOneAndUpdate(
         {
           _id: cartId,
-          "products.item": id,
+          "products._id": id,
         },
         {
           $inc: { "products.$.quantity": info },
         },
         { new: true }
       );
-      res.status(200).json(data);
+
+      res.status(200).json(product);
     }
   } catch (error) {
     res.status(400).json({ message: "There is Something Error on Database." });
@@ -198,12 +162,61 @@ export const removeFromCart = async (req, res) => {
         userId,
       },
       {
-        $pull: { products: { item: itemId} },
+        $pull: { products: { item: itemId } },
       }
     );
     res.status(200).json(data);
   } catch (error) {
     res.status(400).json({ message: "There is Something Error on Database" });
     console.log(error);
+  }
+};
+
+export const getCartItemsCount = async (req, res) => {
+  try {
+    const userId = req.userId;
+    let count = null;
+    const data = await Cart.findOne({
+      userId,
+    });
+    if (data) {
+      count = data.products.length;
+    }
+    res.status(200).json(count);
+  } catch (error) {
+    res.status(400).json({ message: "Fetching Data From Database Failed." });
+  }
+};
+
+export const getCartTotal = async (req, res) => {
+  try {
+    const userId = req.userId;
+
+    const data = await Cart.aggregate([
+      {
+        $match: { userId: new mongoose.Types.ObjectId(userId) },
+      },
+      {
+        $unwind: "$products",
+      },
+      {
+        $project: { item: "$products.item", quantity: "$products.quantity" },
+      },
+      {
+        $group: {
+          _id: null,
+          total: {
+            $sum: {
+              $multiply: [{ $toInt: "$item.price" }, { $toInt: "$quantity" }],
+            },
+          },
+        },
+      },
+    ]).exec();
+    res.status(200).json(data[0].total)
+  } catch (error) {
+    res
+      .status(400)
+      .json({ message: "There is Something Error on Fetching Data." });
   }
 };

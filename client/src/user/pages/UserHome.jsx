@@ -3,15 +3,15 @@ import { useDispatch } from "react-redux";
 
 import { Navbar, ViewProducts } from "../../components";
 import { getAllProducts } from "../../redux/admin/adminActions";
-import { getCartItems } from "../../redux/cart/cartActions";
+import { getCartItems, getCartItemsCount } from "../../redux/cart/cartActions";
 
 function UserHome() {
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(getAllProducts());
-    dispatch(getCartItems());
-  }, [dispatch]);
+    dispatch(getCartItemsCount());
+  }, []);
 
   return (
     <div>

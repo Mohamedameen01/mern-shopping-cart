@@ -1,5 +1,10 @@
 import { useDispatch, useSelector } from "react-redux";
-import { removeCartItem, setItemQuantity } from "../redux/cart/cartActions";
+import {
+  getCartItems,
+  getTotalCartPrice,
+  removeCartItem,
+  setItemQuantity,
+} from "../redux/cart/cartActions";
 import { useState } from "react";
 import { toast } from "react-toastify";
 
@@ -7,14 +12,15 @@ import OnConfirm from "./OnConfirm";
 
 function Cart() {
   const dispatch = useDispatch();
-  const cartItem = useSelector((state) => state.cart)[0];
-  console.log(cartItem);
+  const carts = useSelector((state) => state.cart.cartItems);
+  const cartTotal = useSelector((state) => state.cart.totalPrice);
 
   const [open, setOpen] = useState(false);
   const [deleteData, setDeleteData] = useState();
 
   const handleQuantity = async (id, info, quantity) => {
-    dispatch(setItemQuantity(id, info, quantity, cartItem._id));
+    dispatch(setItemQuantity(id, info, quantity, carts._id));
+    dispatch(getTotalCartPrice());
   };
 
   const handleRemove = (id, title) => {
@@ -34,7 +40,7 @@ function Cart() {
 
   return (
     <section>
-      {!cartItem ? (
+      {!carts ? (
         <div className="container w-75 mt-5 p-2 border border-primary-subtle rounded shadow-lg bg-dark text-white">
           <p className="my-auto p-2">
             Looks like your cart is empty. Add some items to get started!
@@ -55,35 +61,35 @@ function Cart() {
             </thead>
 
             <tbody>
-              {cartItem?.items.map((obj, index) => (
+              {carts?.products?.map((obj, index) => (
                 <tr key={index}>
                   <td scope="col">
                     <img
-                      src={obj?.product?.image}
-                      alt={obj?.product?.title}
+                      src={obj?.item?.image}
+                      alt={obj?.item?.title}
                       style={{ width: "70px", height: "70px" }}
                     />
                   </td>
-                  <td scope="col">{obj?.product?.title}</td>
+                  <td scope="col">{obj?.item?.title}</td>
                   <td scope="col">
                     <button
-                      onClick={() => handleQuantity(obj.item, -1, obj.quantity)}
+                      onClick={() => handleQuantity(obj._id, -1, obj.quantity)}
                       className="btn btn-danger"
                     >
                       -
                     </button>
                     <span className="m-2">{obj?.quantity}</span>
                     <button
-                      onClick={() => handleQuantity(obj.item, 1, obj.quantity)}
+                      onClick={() => handleQuantity(obj._id, 1, obj.quantity)}
                       className="btn btn-primary"
                     >
                       +
                     </button>
                   </td>
-                  <td scope="col">{obj?.product?.price}</td>
+                  <td scope="col">{obj?.item?.price}</td>
                   <td>
                     <button
-                      onClick={() => handleRemove(obj.item, obj.product?.title)}
+                      onClick={() => handleRemove(obj.item, obj.item?.title)}
                       className="btn btn-danger"
                     >
                       Remove
@@ -95,7 +101,7 @@ function Cart() {
           </table>
           <div className="d-flex flex-column align-items-center align-items-md-end">
             <h3 className="fw-medium">
-              Total: <span id="total">{cartItem?.total}</span>
+              Total: <span id="total">{cartTotal}</span>
             </h3>
             <a className="btn btn-success mt-3 px-5 fw-semibold">Place Order</a>
             <h3 className="hidden"></h3>

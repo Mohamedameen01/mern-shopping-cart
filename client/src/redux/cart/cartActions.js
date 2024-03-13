@@ -1,10 +1,17 @@
 import { toast } from "react-toastify";
 import * as api from "../../api/index";
-import { ADD_TO_CART, GET_CART, ITEM_QUANTITY } from "./actionTypes";
+import {
+  ADD_TO_CART,
+  CART_ITEM_COUNT,
+  CART_TOTAL_AMOUNT,
+  GET_CART,
+  ITEM_QUANTITY,
+} from "./actionTypes";
 
 export const addToCart = (id) => async (dispatch) => {
   try {
     const { data } = await api.addCart(id);
+
     await dispatch({ type: ADD_TO_CART, payload: data });
     toast.success("Product Added to Cart");
   } catch (error) {
@@ -31,8 +38,8 @@ export const setItemQuantity =
         quantity,
         cartId,
       });
-      console.log(data);
-      // await dispatch({ type: ITEM_QUANTITY, payload: data });
+      
+      await dispatch({ type: ITEM_QUANTITY, payload: data });
     } catch (error) {
       toast.error(error.message);
       console.log(error);
@@ -41,11 +48,28 @@ export const setItemQuantity =
 
 export const removeCartItem = (id) => async (dispatch) => {
   try {
-    const {data} = await api.removeCart(id);
-    console.log(data);
-    toast.warning('Product Removed From Cart.')
+    const { data } = await api.removeCart(id);
+    toast.warning("Product Removed From Cart.");
   } catch (error) {
     toast.error(error.message);
     console.log(error);
   }
-}
+};
+
+export const getCartItemsCount = () => async (dispatch) => {
+  try {
+    const { data } = await api.getCartCount();
+    dispatch({ type: CART_ITEM_COUNT, payload: data });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getTotalCartPrice = () => async (dispatch) => {
+  try {
+    const { data } = await api.getCartPrice();
+    dispatch({ type: CART_TOTAL_AMOUNT, payload: data });
+  } catch (error) {
+    toast.error(error.message);
+  }
+};

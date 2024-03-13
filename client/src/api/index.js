@@ -52,3 +52,5 @@ export const addCart = (id) => API.post(`/cart?id=${id}`);
 export const getCart = () => API.get('/cart');
 export const setQuantity = (data) => API.patch(`/cart`, data);
 export const removeCart = (id) => API.delete(`/cart?id=${id}`);
+export const getCartCount = () => API.get('/cart-count');
+export const getCartPrice  = () => API.get('/cart-amount');
