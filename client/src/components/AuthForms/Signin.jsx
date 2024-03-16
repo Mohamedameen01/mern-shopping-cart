@@ -24,10 +24,8 @@ function Signin() {
   const onSubmit = (data) => {
     if (location.pathname === "/admin/signin") {
       dispatch(adminSignin(data, navigate));
-      console.log("Admin Signin");
     } else {
       dispatch(userSignin(data, navigate));
-      console.log("User Signin");
     }
   };
 

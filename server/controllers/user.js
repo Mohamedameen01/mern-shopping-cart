@@ -5,6 +5,8 @@ import dotenv from "dotenv";
 import User from "../models/user/authSchema.js";
 import Product from "../models/admin/productSchema.js";
 import Cart from "../models/user/cartSchema.js";
+import Order from "../models/user/orderSchema.js";
+
 import mongoose from "mongoose";
 
 dotenv.config();
@@ -130,7 +132,7 @@ export const setCartQuantity = async (req, res) => {
         { $pull: { products: { _id: id } } },
         { new: true }
       );
-      
+
       res.status(200).json({ data, message: "Product Removed." });
     } else {
       const product = await Cart.findOneAndUpdate(
@@ -157,12 +159,15 @@ export const removeFromCart = async (req, res) => {
     const itemId = req.query.id;
     const userId = req.userId;
 
-    const data = await Cart.findOneAndDelete(
+    const data = await Cart.findOneAndUpdate(
       {
         userId,
       },
       {
-        $pull: { products: { item: itemId } },
+        $pull: { products: { _id: itemId } },
+      },
+      {
+        new: true,
       }
     );
     res.status(200).json(data);
@@ -213,7 +218,34 @@ export const getCartTotal = async (req, res) => {
         },
       },
     ]).exec();
-    res.status(200).json(data[0].total)
+    res.status(200).json(data[0].total);
+  } catch (error) {
+    res
+      .status(400)
+      .json({ message: "There is Something Error on Fetching Data." });
+  }
+};
+
+export const setPlaceOrdering = async (req, res) => {
+  try {
+    const { cartId, address, pincode, mobile, paymentMethod, total } = req.body;
+    const userId = req.userId;
+
+    let status = paymentMethod === "COD" ? "Placed" : "Pending";
+
+    const order = await Order.create({
+      userId,
+      cartId,
+      deliveryDetails: {
+        address,
+        pincode,
+        mobile,
+      },
+      status,
+      total,
+    }).then(async (data) => {
+      await Cart.findByIdAndDelete(cartId);
+    });
   } catch (error) {
     res
       .status(400)

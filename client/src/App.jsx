@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import { Signin, Signup } from "./components/AuthForms";
-import { UserLayout, Auth, UserHome, UserCart } from "./user";
+import { UserLayout, Auth, UserHome, UserCart, UserOrder } from "./user";
 import { AdminLayout, AdminAuth, AdminHome, AllProducts, AllUsers, AllOrders } from "./admin";
 import { AddProduct, EditProduct } from "./components";
 
@@ -18,6 +18,7 @@ function App() {
           </Route>
           <Route index element={<UserHome />} />
           <Route path="/cart" element={<UserCart />} />
+          <Route path="/place-order/:cartId" element={<UserOrder />} />
         </Route>
 
         {/* This Route for admin */}

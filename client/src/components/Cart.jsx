@@ -9,6 +9,7 @@ import { useState } from "react";
 import { toast } from "react-toastify";
 
 import OnConfirm from "./OnConfirm";
+import { Link } from "react-router-dom";
 
 function Cart() {
   const dispatch = useDispatch();
@@ -19,8 +20,11 @@ function Cart() {
   const [deleteData, setDeleteData] = useState();
 
   const handleQuantity = async (id, info, quantity) => {
-    dispatch(setItemQuantity(id, info, quantity, carts._id));
-    dispatch(getTotalCartPrice());
+    await dispatch(setItemQuantity(id, info, quantity, carts._id));
+    if (carts.products?.length !== 0 ) {
+      await dispatch(getCartItems());
+      dispatch(getTotalCartPrice());
+    }
   };
 
   const handleRemove = (id, title) => {
@@ -35,12 +39,15 @@ function Cart() {
 
   const handleSuccess = async () => {
     await dispatch(removeCartItem(deleteData.id));
+    if (carts.products?.length !== 0 ) {
+      dispatch(getTotalCartPrice());
+    }
     setOpen(!open);
   };
 
   return (
     <section>
-      {!carts ? (
+      {carts.products?.length == 0 ? (
         <div className="container w-75 mt-5 p-2 border border-primary-subtle rounded shadow-lg bg-dark text-white">
           <p className="my-auto p-2">
             Looks like your cart is empty. Add some items to get started!
@@ -89,7 +96,7 @@ function Cart() {
                   <td scope="col">{obj?.item?.price}</td>
                   <td>
                     <button
-                      onClick={() => handleRemove(obj.item, obj.item?.title)}
+                      onClick={() => handleRemove(obj._id, obj.item?.title)}
                       className="btn btn-danger"
                     >
                       Remove
@@ -103,7 +110,7 @@ function Cart() {
             <h3 className="fw-medium">
               Total: <span id="total">{cartTotal}</span>
             </h3>
-            <a className="btn btn-success mt-3 px-5 fw-semibold">Place Order</a>
+            <Link to={`/place-order/${carts?._id}`}  className="btn btn-success mt-3 px-5 fw-semibold">Place Order</Link>
             <h3 className="hidden"></h3>
           </div>
         </div>

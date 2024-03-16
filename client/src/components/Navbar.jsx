@@ -15,7 +15,7 @@ function Navbar({ admin }) {
 
   const [info, setInfo] = useState({
     user: JSON.parse(localStorage.getItem("USER_LOCAL")),
-    admin: JSON.parse(localStorage.getItem("ADMIN_LOCAL")),
+    owner: JSON.parse(localStorage.getItem("ADMIN_LOCAL")),
   });
 
   const handleLogout = async () => {
@@ -29,15 +29,15 @@ function Navbar({ admin }) {
   };
 
   useEffect(() => {
+    const { user, owner } = info;
 
-    const { user, admin } = info;
     if (admin) {
-      const adminToken = admin?.token;
+      const adminToken = owner?.token;
 
       if (adminToken) {
         const adminDecoded = jwtDecode(adminToken);
 
-        if (adminDecoded * 1000 < new Date().getTime()) {
+        if (adminDecoded.exp * 1000 < new Date().getTime()) {
           handleLogout();
         }
       }
@@ -50,14 +50,13 @@ function Navbar({ admin }) {
 
       if (userToken) {
         const userDecoded = jwtDecode(userToken);
-
-        if (userDecoded * 1000 < new Date().getTime()) {
+        if (userDecoded.exp * 1000 < new Date().getTime()) {
           handleLogout();
         }
       }
       setInfo({
         user: JSON.parse(localStorage.getItem("USER_LOCAL")),
-        admin: JSON.parse(localStorage.getItem("ADMIN_LOCAL"))
+        admin: JSON.parse(localStorage.getItem("ADMIN_LOCAL")),
       });
     }
   }, [location]);

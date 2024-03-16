@@ -6,6 +6,7 @@ import {
   CART_TOTAL_AMOUNT,
   GET_CART,
   ITEM_QUANTITY,
+  REMOVE_CART_ITEM,
 } from "./actionTypes";
 
 export const addToCart = (id) => async (dispatch) => {
@@ -38,7 +39,7 @@ export const setItemQuantity =
         quantity,
         cartId,
       });
-      
+
       await dispatch({ type: ITEM_QUANTITY, payload: data });
     } catch (error) {
       toast.error(error.message);
@@ -49,6 +50,7 @@ export const setItemQuantity =
 export const removeCartItem = (id) => async (dispatch) => {
   try {
     const { data } = await api.removeCart(id);
+    await dispatch({ type: REMOVE_CART_ITEM, payload: data });
     toast.warning("Product Removed From Cart.");
   } catch (error) {
     toast.error(error.message);
@@ -61,7 +63,7 @@ export const getCartItemsCount = () => async (dispatch) => {
     const { data } = await api.getCartCount();
     dispatch({ type: CART_ITEM_COUNT, payload: data });
   } catch (error) {
-    console.log(error);
+    toast.error(error.message);
   }
 };
 
@@ -73,3 +75,11 @@ export const getTotalCartPrice = () => async (dispatch) => {
     toast.error(error.message);
   }
 };
+
+export const setPlaceOrder = (info) => async (dispatch) => {
+  try {
+    const { data } = api.placeOrdering(info);
+  } catch (error) {
+    toast.error(error.message);
+  }
+}
