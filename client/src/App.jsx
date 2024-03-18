@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Signin, Signup } from "./components/AuthForms";
 import { UserLayout, Auth, UserHome, UserCart, UserOrder } from "./user";
 import { AdminLayout, AdminAuth, AdminHome, AllProducts, AllUsers, AllOrders } from "./admin";
-import { AddProduct, EditProduct } from "./components";
+import { AddProduct, CheckoutFail, CheckoutSuccess, EditProduct } from "./components";
 
 
 function App() {
@@ -19,6 +19,9 @@ function App() {
           <Route index element={<UserHome />} />
           <Route path="/cart" element={<UserCart />} />
           <Route path="/place-order/:cartId" element={<UserOrder />} />
+          <Route path="/checkout-success" element={<CheckoutSuccess />} />
+          <Route path="/checkout-failure" element={<CheckoutFail />} />
+        
         </Route>
 
         {/* This Route for admin */}

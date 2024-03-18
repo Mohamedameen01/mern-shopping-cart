@@ -1,13 +1,13 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
+import Stripe from "stripe";
+import mongoose from "mongoose";
 
 import User from "../models/user/authSchema.js";
 import Product from "../models/admin/productSchema.js";
 import Cart from "../models/user/cartSchema.js";
 import Order from "../models/user/orderSchema.js";
-
-import mongoose from "mongoose";
 
 dotenv.config();
 
@@ -244,11 +244,37 @@ export const setPlaceOrdering = async (req, res) => {
       status,
       total,
     }).then(async (data) => {
-      await Cart.findByIdAndDelete(cartId);
+      if (status === "Pending") {
+        const user = await User.findById(userId);
+        const cart = await Cart.findById(cartId);
+        const stripe = new Stripe(process.env.STRIPE_KEY);
+
+        const session = await stripe.checkout.sessions.create({
+          payment_method_types: ["card"],
+          mode: "payment",
+          success_url: `${process.env.CLIENT_URL}/checkout-success`,
+          cancel_url: `${process.env.CLIENT_URL}/checkout-failure`,
+          customer_email: user?.email,
+          line_items: cart.products?.map((obj) => ({
+            price_data: {
+              currency: "inr",
+              unit_amount: obj.item?.price * 100,
+              product_data: {
+                name: obj.item?.title,
+                description: obj.item?.category,
+              },
+            },
+            quantity: obj.quantity,
+          })),
+        });
+        console.log(session);
+        // console.log(cart);
+      }
     });
   } catch (error) {
     res
       .status(400)
       .json({ message: "There is Something Error on Fetching Data." });
+    console.log(error);
   }
 };
