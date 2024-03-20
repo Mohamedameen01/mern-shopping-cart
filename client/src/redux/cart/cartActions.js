@@ -78,8 +78,12 @@ export const getTotalCartPrice = () => async (dispatch) => {
 
 export const setPlaceOrder = (info) => async (dispatch) => {
   try {
-    const { data } = api.placeOrdering(info);
+    const { data } = await api.placeOrdering(info);
+    if (data.url) {
+      window.location.href = data.url;
+    }
   } catch (error) {
     toast.error(error.message);
+    console.log(error);
   }
-}
+};

@@ -255,9 +255,10 @@ export const setPlaceOrdering = async (req, res) => {
           success_url: `${process.env.CLIENT_URL}/checkout-success`,
           cancel_url: `${process.env.CLIENT_URL}/checkout-failure`,
           customer_email: user?.email,
+          billing_address_collection: 'required',
           line_items: cart.products?.map((obj) => ({
             price_data: {
-              currency: "inr",
+              currency: "INR",
               unit_amount: obj.item?.price * 100,
               product_data: {
                 name: obj.item?.title,
@@ -267,8 +268,8 @@ export const setPlaceOrdering = async (req, res) => {
             quantity: obj.quantity,
           })),
         });
-        console.log(session);
-        // console.log(cart);
+        
+        res.status(200).json(session);
       }
     });
   } catch (error) {
