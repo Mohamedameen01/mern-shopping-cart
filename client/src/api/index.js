@@ -55,3 +55,4 @@ export const removeCart = (id) => API.delete(`/cart?id=${id}`);
 export const getCartCount = () => API.get('/cart-count');
 export const getCartPrice  = () => API.get('/cart-amount');
 export const placeOrdering = (info) => API.post('/place-order',info);
+export const getOrderList = () => API.get('/orders');

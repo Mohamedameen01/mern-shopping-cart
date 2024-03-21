@@ -1,10 +1,28 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import { Signin, Signup } from "./components/AuthForms";
-import { UserLayout, Auth, UserHome, UserCart, UserOrder } from "./user";
-import { AdminLayout, AdminAuth, AdminHome, AllProducts, AllUsers, AllOrders } from "./admin";
-import { AddProduct, CheckoutFail, CheckoutSuccess, EditProduct } from "./components";
-
+import {
+  UserLayout,
+  Auth,
+  UserHome,
+  UserCart,
+  UserPlaceOrder,
+  UserOrdersList,
+} from "./user";
+import {
+  AdminLayout,
+  AdminAuth,
+  AdminHome,
+  AllProducts,
+  AllUsers,
+  AllOrders,
+} from "./admin";
+import {
+  AddProduct,
+  CheckoutFail,
+  CheckoutSuccess,
+  EditProduct,
+} from "./components";
 
 function App() {
   return (
@@ -18,10 +36,10 @@ function App() {
           </Route>
           <Route index element={<UserHome />} />
           <Route path="/cart" element={<UserCart />} />
-          <Route path="/place-order/:cartId" element={<UserOrder />} />
+          <Route path="/place-order/:cartId" element={<UserPlaceOrder />} />
+          <Route path="/orders" element={<UserOrdersList />} />
           <Route path="/checkout-success" element={<CheckoutSuccess />} />
           <Route path="/checkout-failure" element={<CheckoutFail />} />
-        
         </Route>
 
         {/* This Route for admin */}

@@ -101,7 +101,7 @@ function Navbar({ admin }) {
 
               <li>
                 <a
-                  href={admin ? "/admin/all-orders" : ""}
+                  href={admin ? "/admin/all-orders" : "/orders"}
                   className="nav-link px-2 link-body-emphasis"
                 >
                   {admin ? "All Orders" : "Orders"}

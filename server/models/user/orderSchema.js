@@ -12,7 +12,8 @@ const orderSchema = new mongoose.Schema({
     date: { type: Date, default: Date.now, required: true},
     status: { type: String, required: true},
     total: { type: Number, required: true},
-    cartId: { type: mongoose.Schema.ObjectId, required: true}
+    cartId: { type: mongoose.Schema.ObjectId, required: true},
+    paymentMethod: {type:String, required: true}
 })
 
 const Order = mongoose.model('Orders', orderSchema);

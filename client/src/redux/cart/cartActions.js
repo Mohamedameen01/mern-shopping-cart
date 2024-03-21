@@ -84,6 +84,5 @@ export const setPlaceOrder = (info) => async (dispatch) => {
     }
   } catch (error) {
     toast.error(error.message);
-    console.log(error);
   }
 };

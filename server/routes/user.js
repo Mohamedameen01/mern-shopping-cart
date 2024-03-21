@@ -1,6 +1,6 @@
 import express from "express";
 
-import { register, login, addToCart, getCart, setCartQuantity, removeFromCart, getCartItemsCount, getCartTotal, setPlaceOrdering } from "../controllers/user.js";
+import { register, login, addToCart, getCart, setCartQuantity, removeFromCart, getCartItemsCount, getCartTotal, setPlaceOrdering, getUserOrders } from "../controllers/user.js";
 import { verifyUserLogin } from "../middleware/index.js";
 
 const router = express.Router();
@@ -17,5 +17,5 @@ router.delete('/cart/',verifyUserLogin,removeFromCart);
 router.get('/cart-count',verifyUserLogin,getCartItemsCount);
 router.get('/cart-amount',verifyUserLogin,getCartTotal);
 router.post('/place-order', verifyUserLogin, setPlaceOrdering);
-
+router.get('/orders', verifyUserLogin, getUserOrders);
 export default router;

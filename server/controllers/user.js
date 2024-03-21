@@ -243,6 +243,7 @@ export const setPlaceOrdering = async (req, res) => {
       },
       status,
       total,
+      paymentMethod,
     }).then(async (data) => {
       if (status === "Pending") {
         const user = await User.findById(userId);
@@ -255,7 +256,7 @@ export const setPlaceOrdering = async (req, res) => {
           success_url: `${process.env.CLIENT_URL}/checkout-success`,
           cancel_url: `${process.env.CLIENT_URL}/checkout-failure`,
           customer_email: user?.email,
-          billing_address_collection: 'required',
+          billing_address_collection: "required",
           line_items: cart.products?.map((obj) => ({
             price_data: {
               currency: "INR",
@@ -268,14 +269,29 @@ export const setPlaceOrdering = async (req, res) => {
             quantity: obj.quantity,
           })),
         });
-        
         res.status(200).json(session);
       }
+      await Cart.findByIdAndDelete(cartId);
     });
   } catch (error) {
     res
       .status(400)
       .json({ message: "There is Something Error on Fetching Data." });
     console.log(error);
+  }
+};
+
+export const getUserOrders = async (req, res) => {
+  try {
+    const userId = await req.userId;
+    const data = await Order.find({
+      userId: new mongoose.Types.ObjectId(userId),
+    });
+    console.log(data);
+    res.status(200).json(data);
+  } catch (error) {
+    res
+      .status(400)
+      .json({ message: "There is Something Error on Fetching Data" });
   }
 };
