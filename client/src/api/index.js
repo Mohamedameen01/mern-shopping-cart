@@ -46,6 +46,7 @@ export const updateProduct = (data) => API.patch("/admin/edit-product", data);
 export const deleteProduct = (id) =>
   API.delete(`/admin/delete-product?id=${id}`);
 export const getAllUsers = () => API.get("/admin/all-users");
+export const getEveryOrderList = () => API.get('/admin/all-orders');
 
 //User Side:
 export const addCart = (id) => API.post(`/cart?id=${id}`);

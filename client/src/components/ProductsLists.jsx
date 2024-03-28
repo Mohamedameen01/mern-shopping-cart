@@ -1,15 +1,24 @@
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import OnConfirm from "./OnConfirm";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { deleteSelectedProduct } from "../redux/admin/adminActions";
 
 function ProductsLists() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  
   const products = useSelector((state) => state.admin);
   const [open, setOpen] = useState(false);
   const [deleteData, setDeleteData] = useState();
-  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const owner = JSON.parse(localStorage.getItem("ADMIN_LOCAL"));
+    if (!owner) {
+      navigate('/admin/signin')
+    }
+  },[])
 
   const handleDelete = (id, title) => {
     setOpen(!open);

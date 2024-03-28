@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { setPlaceOrder } from "../redux/cart/cartActions";
 
 function PlaceOrder() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { cartId } = useParams();
   const total = useSelector((state) => state.cart.totalPrice);
   const [orderInfo, setOrderInfo] = useState({
@@ -18,7 +19,7 @@ function PlaceOrder() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await dispatch(setPlaceOrder(orderInfo));
+    await dispatch(setPlaceOrder(orderInfo,navigate));
     setOrderInfo({
       address: "",
       pincode: "",

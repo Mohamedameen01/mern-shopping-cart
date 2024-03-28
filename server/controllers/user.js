@@ -226,16 +226,48 @@ export const getCartTotal = async (req, res) => {
   }
 };
 
+export const getCartProductsId = async (id) => {
+  try {
+    const data = await Cart.aggregate([
+      {
+        $match: { userId: new mongoose.Types.ObjectId(id) },
+      },
+      {
+        $unwind: "$products",
+      },
+      {
+        $group: {
+          _id: "$_id",
+          products: { $push: "$products.item" },
+        },
+      },
+      {
+        $unwind: "$products",
+      },
+      {
+        $project: {
+          products: 1,
+          _id: 0,
+        },
+      },
+    ]);
+    return data.map((item) => item.products);
+  } catch (error) {
+    return error;
+  }
+};
+
 export const setPlaceOrdering = async (req, res) => {
   try {
     const { cartId, address, pincode, mobile, paymentMethod, total } = req.body;
     const userId = req.userId;
 
+    const products = await getCartProductsId(userId);
+    
     let status = paymentMethod === "COD" ? "Placed" : "Pending";
 
     const order = await Order.create({
       userId,
-      cartId,
       deliveryDetails: {
         address,
         pincode,
@@ -244,6 +276,7 @@ export const setPlaceOrdering = async (req, res) => {
       status,
       total,
       paymentMethod,
+      products,
     }).then(async (data) => {
       if (status === "Pending") {
         const user = await User.findById(userId);
@@ -271,6 +304,7 @@ export const setPlaceOrdering = async (req, res) => {
         });
         res.status(200).json(session);
       }
+      res.status(200).json(data);
       await Cart.findByIdAndDelete(cartId);
     });
   } catch (error) {
@@ -295,3 +329,5 @@ export const getUserOrders = async (req, res) => {
       .json({ message: "There is Something Error on Fetching Data" });
   }
 };
+
+

@@ -18,4 +18,5 @@ router.get('/cart-count',verifyUserLogin,getCartItemsCount);
 router.get('/cart-amount',verifyUserLogin,getCartTotal);
 router.post('/place-order', verifyUserLogin, setPlaceOrdering);
 router.get('/orders', verifyUserLogin, getUserOrders);
+
 export default router;

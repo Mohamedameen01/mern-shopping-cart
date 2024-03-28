@@ -1,11 +1,21 @@
-import { GET_ORDERS } from "./actionTypes";
+import { GET_ALL_ORDERS, GET_USER_ORDERS, SELECTED_ORDER } from "./actionTypes";
 
-const orderReducer = (state = [], action) => {
+const initialState = {
+  allOrders: [],
+  userOrders: [],
+  oneOrder: []
+}
+
+const orderReducer = (state = initialState, action) => {
   switch (action.type) {
-    case GET_ORDERS:
-      return action.payload;
+    case GET_USER_ORDERS:
+      return {...state,userOrders:action.payload};
+    case GET_ALL_ORDERS:
+      return {...state,allOrders:action.payload};
+    case SELECTED_ORDER:
+      return {...state, oneOrder: action.payload};
     default:
-      return [];
+      return state;
   }
 };
 

@@ -10,5 +10,22 @@ import Cart from "./Cart";
 import PlaceOrder from "./PlaceOrder";
 import CheckoutSuccess from "./CheckoutSuccess";
 import CheckoutFail from "./CheckoutFail";
+import SelectedOrder from "./SelectedOrder";
+import AdminViewOrders from "./AdminViewOrders";
 
-export { Navbar, ProductsLists, AddProduct, EditProduct, OnConfirm, ViewProducts, ViewOrders, ViewUsers, Cart, PlaceOrder, CheckoutFail, CheckoutSuccess };
+export {
+  Navbar,
+  ProductsLists,
+  AddProduct,
+  EditProduct,
+  OnConfirm,
+  ViewProducts,
+  ViewOrders,
+  ViewUsers,
+  Cart,
+  PlaceOrder,
+  CheckoutFail,
+  CheckoutSuccess,
+  SelectedOrder,
+  AdminViewOrders
+};

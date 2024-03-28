@@ -76,12 +76,13 @@ export const getTotalCartPrice = () => async (dispatch) => {
   }
 };
 
-export const setPlaceOrder = (info) => async (dispatch) => {
+export const setPlaceOrder = (info, navigate) => async (dispatch) => {
   try {
     const { data } = await api.placeOrdering(info);
     if (data.url) {
       window.location.href = data.url;
     }
+    navigate("/");
   } catch (error) {
     toast.error(error.message);
   }

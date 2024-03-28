@@ -1,1 +1,3 @@
-export const GET_ORDERS = 'GET_ORDERS';
+export const GET_USER_ORDERS = 'GET_USER_ORDERS';
+export const GET_ALL_ORDERS = 'GET_ALL_ORDERS';
+export const SELECTED_ORDER = 'SELECTED_ORDER';

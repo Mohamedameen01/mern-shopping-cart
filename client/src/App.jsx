@@ -8,6 +8,7 @@ import {
   UserCart,
   UserPlaceOrder,
   UserOrdersList,
+  UserSelectedOrder,
 } from "./user";
 import {
   AdminLayout,
@@ -16,6 +17,7 @@ import {
   AllProducts,
   AllUsers,
   AllOrders,
+  AdminSelectedOrder,
 } from "./admin";
 import {
   AddProduct,
@@ -36,10 +38,14 @@ function App() {
           </Route>
           <Route index element={<UserHome />} />
           <Route path="/cart" element={<UserCart />} />
-          <Route path="/place-order/:cartId" element={<UserPlaceOrder />} />
           <Route path="/orders" element={<UserOrdersList />} />
+          <Route path="/place-order/:cartId" element={<UserPlaceOrder />} />
           <Route path="/checkout-success" element={<CheckoutSuccess />} />
           <Route path="/checkout-failure" element={<CheckoutFail />} />
+          <Route
+            path="/view-order"
+            element={<UserSelectedOrder />}
+          />
         </Route>
 
         {/* This Route for admin */}
@@ -54,6 +60,8 @@ function App() {
           <Route path="/admin/all-products" element={<AllProducts />} />
           <Route path="/admin/all-orders" element={<AllOrders />} />
           <Route path="/admin/all-users" element={<AllUsers />} />
+          <Route path="/admin/view-order" element={<AdminSelectedOrder />} />
+
         </Route>
       </Routes>
     </BrowserRouter>

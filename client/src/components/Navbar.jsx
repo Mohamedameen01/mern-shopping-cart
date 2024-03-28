@@ -4,7 +4,6 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 
 import { ADMIN_LOGOUT, USER_LOGOUT } from "../redux/auth/actionTypes";
-// import { getCartItemsCount } from "../redux/cart/cartActions";
 
 function Navbar({ admin }) {
   const dispatch = useDispatch();
@@ -41,9 +40,10 @@ function Navbar({ admin }) {
           handleLogout();
         }
       }
+
       setInfo({
         user: JSON.parse(localStorage.getItem("USER_LOCAL")),
-        admin: JSON.parse(localStorage.getItem("ADMIN_LOCAL")),
+        owner: JSON.parse(localStorage.getItem("ADMIN_LOCAL")),
       });
     } else {
       const userToken = user?.token;
@@ -56,7 +56,7 @@ function Navbar({ admin }) {
       }
       setInfo({
         user: JSON.parse(localStorage.getItem("USER_LOCAL")),
-        admin: JSON.parse(localStorage.getItem("ADMIN_LOCAL")),
+        owner: JSON.parse(localStorage.getItem("ADMIN_LOCAL")),
       });
     }
   }, [location]);
@@ -79,7 +79,7 @@ function Navbar({ admin }) {
                   href={admin ? "/admin/all-products" : ""}
                   className="nav-link px-2 link-secondary"
                 >
-                  {admin ? "All Products" : "Products"}
+                  {admin && "All Products"}
                 </a>
               </li>
               <li>
@@ -88,14 +88,16 @@ function Navbar({ admin }) {
                   className="nav-link px-2 link-body-emphasis position:relative me-3"
                 >
                   {admin ? "All Users" : "Cart"}
-                  {!admin && (
-                    <span
-                      className="position-absolute rounded-circle  badge bg-success"
-                      id="cart-counts"
-                    >
-                      {cartItem?.count || 0}
-                    </span>
-                  )}
+                  <span
+                    className={
+                      admin
+                        ? "d-none"
+                        : "position-absolute rounded-circle  badge bg-success"
+                    }
+                    id="cart-counts"
+                  >
+                    {cartItem?.count || 0}
+                  </span>
                 </a>
               </li>
 
@@ -117,15 +119,25 @@ function Navbar({ admin }) {
                 aria-expanded="false"
               >
                 {admin
-                  ? info.admin
-                    ? info.admin.data?.name
+                  ? info.owner
+                    ? info.owner.data?.name
                     : "Account"
                   : info.user
                   ? info.user.data?.name
                   : "Account"}
               </button>
               <ul className="dropdown-menu bg-dark ">
-                {info?.user?.data?.name || admin?.data?.name ? (
+                {admin && info?.owner?.data?.name ? (
+                  <li>
+                    <a
+                      className="dropdown-item text-light fs-6 fw-medium bg-dark"
+                      style={{ cursor: "pointer" }}
+                      onClick={handleLogout}
+                    >
+                      Logout
+                    </a>
+                  </li>
+                ) : !admin && info?.user?.data?.name ? (
                   <li>
                     <a
                       className="dropdown-item text-light fs-6 fw-medium bg-dark"
@@ -139,7 +151,7 @@ function Navbar({ admin }) {
                   <li>
                     <a
                       className="dropdown-item text-light fs-6 fw-medium bg-dark"
-                      href={admin ? "admin/signin" : "/signin"}
+                      href={admin ? "/admin/signin" : "/signin"}
                     >
                       Login
                     </a>
