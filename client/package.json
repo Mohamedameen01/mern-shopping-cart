@@ -1,6 +1,7 @@
 {
   "name": "client",
   "private": true,
+  "proxy": "https://mern-shopping-cart-mgy3.onrender.com",
   "version": "0.0.0",
   "type": "module",
   "scripts": {
