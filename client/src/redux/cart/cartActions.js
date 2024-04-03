@@ -24,10 +24,7 @@ export const getCartItems = () => async (dispatch) => {
   try {
     const { data } = await api.getCart();
     dispatch({ type: GET_CART, payload: data });
-  } catch (error) {
-    toast.error(error.message);
-    console.log(error);
-  }
+  } catch (error) {}
 };
 
 export const setItemQuantity =
@@ -43,7 +40,6 @@ export const setItemQuantity =
       await dispatch({ type: ITEM_QUANTITY, payload: data });
     } catch (error) {
       toast.error(error.message);
-      console.log(error);
     }
   };
 
@@ -62,18 +58,14 @@ export const getCartItemsCount = () => async (dispatch) => {
   try {
     const { data } = await api.getCartCount();
     dispatch({ type: CART_ITEM_COUNT, payload: data });
-  } catch (error) {
-    toast.error(error.message);
-  }
+  } catch (error) {}
 };
 
 export const getTotalCartPrice = () => async (dispatch) => {
   try {
     const { data } = await api.getCartPrice();
     dispatch({ type: CART_TOTAL_AMOUNT, payload: data });
-  } catch (error) {
-    toast.error(error.message);
-  }
+  } catch (error) {}
 };
 
 export const setPlaceOrder = (info, navigate) => async (dispatch) => {

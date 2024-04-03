@@ -16,12 +16,13 @@ function Cart() {
   const carts = useSelector((state) => state.cart.cartItems);
   const cartTotal = useSelector((state) => state.cart.totalPrice);
 
+  console.log(carts);
   const [open, setOpen] = useState(false);
   const [deleteData, setDeleteData] = useState();
 
   const handleQuantity = async (id, info, quantity) => {
     await dispatch(setItemQuantity(id, info, quantity, carts._id));
-    if (carts.products?.length !== 0 ) {
+    if (carts.products?.length !== 0) {
       await dispatch(getCartItems());
       dispatch(getTotalCartPrice());
     }
@@ -39,7 +40,7 @@ function Cart() {
 
   const handleSuccess = async () => {
     await dispatch(removeCartItem(deleteData.id));
-    if (carts.products?.length !== 0 ) {
+    if (carts.products?.length !== 0) {
       dispatch(getTotalCartPrice());
     }
     setOpen(!open);
@@ -47,7 +48,7 @@ function Cart() {
 
   return (
     <section>
-      {carts.products?.length == 0 ? (
+      {carts.length == 0 ? (
         <div className="container w-75 mt-5 p-2 border border-primary-subtle rounded shadow-lg bg-dark text-white">
           <p className="my-auto p-2">
             Looks like your cart is empty. Add some items to get started!
@@ -110,7 +111,12 @@ function Cart() {
             <h3 className="fw-medium">
               Total: <span id="total">{cartTotal}</span>
             </h3>
-            <Link to={`/place-order/${carts?._id}`}  className="btn btn-success mt-3 px-5 fw-semibold">Place Order</Link>
+            <Link
+              to={`/place-order/${carts?._id}`}
+              className="btn btn-success mt-3 px-5 fw-semibold"
+            >
+              Place Order
+            </Link>
             <h3 className="hidden"></h3>
           </div>
         </div>

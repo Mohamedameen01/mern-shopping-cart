@@ -46,14 +46,14 @@ export const updateProduct = (data) => API.patch("/admin/edit-product", data);
 export const deleteProduct = (id) =>
   API.delete(`/admin/delete-product?id=${id}`);
 export const getAllUsers = () => API.get("/admin/all-users");
-export const getEveryOrderList = () => API.get('/admin/all-orders');
+export const getEveryOrderList = () => API.get("/admin/all-orders");
 
 //User Side:
 export const addCart = (id) => API.post(`/cart?id=${id}`);
-export const getCart = () => API.get('/cart');
+export const getCart = () => API.get("/cart");
 export const setQuantity = (data) => API.patch(`/cart`, data);
 export const removeCart = (id) => API.delete(`/cart?id=${id}`);
-export const getCartCount = () => API.get('/cart-count');
-export const getCartPrice  = () => API.get('/cart-amount');
-export const placeOrdering = (info) => API.post('/place-order',info);
-export const getOrderList = () => API.get('/orders');
+export const getCartCount = () => API.get("/cart-count");
+export const getCartPrice = () => API.get("/cart-amount");
+export const placeOrdering = (info) => API.post("/place-order", info);
+export const getOrderList = () => API.get("/orders");

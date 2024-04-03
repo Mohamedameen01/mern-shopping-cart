@@ -1,12 +1,17 @@
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { addToCart, getCartItemsCount } from "../redux/cart/cartActions";
 
 function ViewProducts({ admin }) {
+  const navigate = useNavigate();
   const products = useSelector((state) => state.admin);
   const dispatch = useDispatch();
+  const user = JSON.parse(localStorage.getItem("USER_LOCAL"));
 
-  const handleCart = async(id) => {
+  const handleCart = async (id) => {
+    if (!user) {
+      navigate("/signin");
+    }
     await dispatch(addToCart(id));
     dispatch(getCartItemsCount());
   };
